@@ -10,10 +10,10 @@ import java.net.UnknownHostException;
 public class DatabaseHandler {
     private static DatabaseHandler instance;
     private DB db;
-    private DBCollection usersCollection;
-    private DBCollection recipesCollection;
+    private DBCollection userColl;
+    private DBCollection recipeColl;
 
-    private  DatabaseHandler()
+    private DatabaseHandler()
     {
 
     }
@@ -32,7 +32,8 @@ public class DatabaseHandler {
         try {
             MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
             db = mongoClient.getDB("opdracht2");
-            getColections();
+            recipeColl = db.getCollection("recipes");
+            userColl = db.getCollection("users");
             System.out.println("Connection succes");
         }
         catch (UnknownHostException e)
@@ -42,17 +43,15 @@ public class DatabaseHandler {
 
     }
 
-    public void getColections()
+    public void addUser(BasicDBObject addquery)
     {
-        if(db != null)
-        {
-
-            recipesCollection = db.getCollection("recipes");
-            usersCollection = db.getCollection("users");
-
-
-        }
+        userColl.insert(addquery);
     }
 
-
+    public void addLikeWithUpdate(BasicDBObject addquery, String username)
+    {
+        BasicDBObject schQuery = new BasicDBObject();
+        schQuery.append("_id", username);
+        userColl.update(schQuery, addquery);
+    }
 }
