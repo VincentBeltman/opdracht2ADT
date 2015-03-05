@@ -1,6 +1,7 @@
 package nl.saxion.ADT;
 
 import com.mongodb.*;
+import org.bson.types.ObjectId;
 
 import java.net.UnknownHostException;
 
@@ -43,15 +44,29 @@ public class DatabaseHandler {
 
     }
 
-    public void addUser(BasicDBObject addquery)
+    public void addUser(BasicDBObject addQuery)
     {
-        userColl.insert(addquery);
+        userColl.insert(addQuery);
     }
 
-    public void addLikeWithUpdate(BasicDBObject addquery, String username)
+    public ObjectId addRecipe(BasicDBObject addQuery)
     {
-        BasicDBObject schQuery = new BasicDBObject();
-        schQuery.append("_id", username);
-        userColl.update(schQuery, addquery);
+        recipeColl.insert(addQuery);
+        return (ObjectId)addQuery.get("_id");
+    }
+
+    public void addLikeToUserWithUpdate(BasicDBObject addQuery, String username)
+    {
+        userColl.update(new BasicDBObject("_id", username), addQuery);
+    }
+
+    public void addLikeToRecipeWithUpdate(BasicDBObject addQuery, int recipeID)
+    {
+        recipeColl.update(new BasicDBObject("_id", recipeID), addQuery);
+    }
+
+    public void addRecipeToUserWithUpdate(BasicDBObject addQuery, String username)
+    {
+        userColl.update(new BasicDBObject("_id", username), addQuery);
     }
 }
