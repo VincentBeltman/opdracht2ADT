@@ -69,4 +69,15 @@ public class DatabaseHandler {
     {
         userColl.update(new BasicDBObject("_id", username), addQuery);
     }
+
+    public void findRecpiesByIngredients(BasicDBObject searchQuery)
+    {
+        System.out.println(searchQuery);
+        DBCursor cursor = recipeColl.find(searchQuery);
+        while (cursor.hasNext())
+        {
+            System.out.println(JsonPrettyPrinter.toJsonPrettyPrint(cursor.next()));
+            //ystem.out.println(cursor.next().toString());
+        }
+    }
 }
