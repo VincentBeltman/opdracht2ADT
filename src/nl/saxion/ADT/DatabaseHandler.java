@@ -2,7 +2,6 @@ package nl.saxion.ADT;
 
 import com.mongodb.*;
 import org.bson.types.ObjectId;
-import sun.misc.BASE64Decoder;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -85,8 +84,7 @@ public class DatabaseHandler {
         userColl.update(new BasicDBObject("_id", username), addQuery);
     }
 
-    public DBObject findCommentPath(BasicDBObject selQuery)
-    {
+    public DBObject findCommentPath(BasicDBObject selQuery) {
         List<DBObject> aggregate = new ArrayList<DBObject>();
         BasicDBObject whrQuery = new BasicDBObject()
                 .append("comments.path", 1)
@@ -96,11 +94,21 @@ public class DatabaseHandler {
         aggregate.add(new BasicDBObject("$match", selQuery));
         aggregate.add(new BasicDBObject("$project", whrQuery));
         DBObject bla = new BasicDBObject();
-        for (DBObject obj:recipeColl.aggregate(aggregate).results())
-        {
-            bla = ((DBObject)obj.get("comments"));
+        for (DBObject obj : recipeColl.aggregate(aggregate).results()) {
+            bla = ((DBObject) obj.get("comments"));
             break;
         }
-        return ((DBObject)bla.get("comments"));
+        return ((DBObject) bla.get("comments"));
+    }
+
+    public void findRecpiesByIngredients(BasicDBObject searchQuery)
+    {
+        System.out.println(searchQuery);
+        DBCursor cursor = recipeColl.find(searchQuery);
+        while (cursor.hasNext())
+        {
+            System.out.println(JsonPrettyPrinter.toJsonPrettyPrint(cursor.next()));
+            //ystem.out.println(cursor.next().toString());
+        }
     }
 }
