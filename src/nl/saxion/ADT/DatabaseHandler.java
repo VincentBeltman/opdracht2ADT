@@ -4,6 +4,8 @@ import com.mongodb.*;
 import org.bson.types.ObjectId;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Mike on 4-3-2015.
@@ -60,14 +62,43 @@ public class DatabaseHandler {
         userColl.update(new BasicDBObject("_id", username), addQuery);
     }
 
-    public void addLikeToRecipeWithUpdate(BasicDBObject addQuery, int recipeID)
+    public void addReviewToRecipe(BasicDBObject addQuery, ObjectId recipeID)
     {
         recipeColl.update(new BasicDBObject("_id", recipeID), addQuery);
+    }
+
+    public void addCommentToRecipe(BasicDBObject addQuery, ObjectId recipeID)
+    {
+        recipeColl.update(new BasicDBObject("_id", recipeID), addQuery);
+    }
+    public void addLikeToRecipeWithUpdate(BasicDBObject updQuery, ObjectId recipeID, ObjectId commentID)
+    {
+        BasicDBObject selQuery = new BasicDBObject()
+                .append("_id", recipeID)
+                .append("comments._id", commentID);
+        recipeColl.update(selQuery, updQuery);
     }
 
     public void addRecipeToUserWithUpdate(BasicDBObject addQuery, String username)
     {
         userColl.update(new BasicDBObject("_id", username), addQuery);
+    }
+
+    public DBObject findCommentPath(BasicDBObject selQuery) {
+        List<DBObject> aggregate = new ArrayList<DBObject>();
+        BasicDBObject whrQuery = new BasicDBObject()
+                .append("comments.path", 1)
+                .append("comments.depth", 1)
+                .append("_id", 0);
+        aggregate.add(new BasicDBObject("$unwind", "$comments"));
+        aggregate.add(new BasicDBObject("$match", selQuery));
+        aggregate.add(new BasicDBObject("$project", whrQuery));
+        DBObject bla = new BasicDBObject();
+        for (DBObject obj : recipeColl.aggregate(aggregate).results()) {
+            bla = ((DBObject) obj.get("comments"));
+            break;
+        }
+        return ((DBObject) bla.get("comments"));
     }
 
     public void findRecpiesByIngredients(BasicDBObject searchQuery)
