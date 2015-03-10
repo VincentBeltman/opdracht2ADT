@@ -14,7 +14,7 @@ public class FindApl {
     public  FindApl(DatabaseHandler dh)
     {
         this.dh =  dh;
-        findRecpiesByIngredients(getIngredientsList("UI" ));
+        findRecpiesByIngredients(getIngredientsList("UI" , "Ganzen" ));
 
     }
 
@@ -31,20 +31,23 @@ public class FindApl {
 
     public void findRecpiesByIngredients(ArrayList<BasicDBObject> ingredients)
     {
-        ArrayList<BasicDBObject> orList = new ArrayList<BasicDBObject>();
+        ArrayList<String> ingredientList = new ArrayList<String>();
+
         for(BasicDBObject ingredient :  ingredients)
         {
             if(ingredient.containsField("name"))
             {
-                BasicDBObject newObject = new BasicDBObject().append("ingredients.name" , ingredient.get("name"));
-                orList.add(newObject);
+
+                ingredientList.add(ingredient.getString("name"));
             }
 
         }
         BasicDBObject query  = new BasicDBObject();
-        query.append("$or" , orList);
-        dh.findRecpiesByIngredients(query);
+        BasicDBObject queryPart = new BasicDBObject();
+        query.append("ingredients.name" ,queryPart);
+        queryPart.append("$in", ingredientList);
 
+        dh.findRecpiesByIngredients(query);
 
 
 
