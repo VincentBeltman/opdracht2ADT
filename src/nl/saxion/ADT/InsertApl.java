@@ -33,9 +33,9 @@ public class InsertApl {
         procedures.add("Pak een gans");
         procedures.add("Kook het");
         List<BasicDBObject> ingredients = new ArrayList<BasicDBObject>();
-        ingredients.add(parseIngredient("Ganzen", 3, "Stuks"));
-        //ObjectId recipeID = addRecipe("Ganzen schotel", 5, courses, 5, 12, types, ingredients,
-        //        "Het vlees van 3 ganzen in één schotel", procedures, username);
+        ingredients.add(parseIngredient("Poep", 3, "Stuks"));
+        ObjectId recipeID = addRecipe("Ganzen schotel", 5, courses, 5, 12, types, ingredients,
+                "Het vlees van 3 ganzen in één schotel", procedures, username);
 
         // Add review
         //addReview(username, 4, recipeID);
@@ -44,13 +44,15 @@ public class InsertApl {
         //addComment(username, "Dit is een comment :D", new ObjectId("54f88f063674acb7bfabf910"), new ObjectId("54fc59831822ad7f85691953"));
 
         // Add like
-        addLikeWithUpdate(false, new ObjectId("54fc59831822ad7f85691953"), "boomhoo", new ObjectId("54f88f063674acb7bfabf910"));
+        // addLikeWithUpdate(false, new ObjectId("54fc59831822ad7f85691953"), "boomhoo", new ObjectId("54f88f063674acb7bfabf910"));
+        // Add review
+        // addReview("boomhoo",4,new ObjectId("54f88f063674acb7bfabf910"));
     }
 
     public void addReview(String username, int review, ObjectId recipeID)
     {
         BasicDBObject addQuery = new BasicDBObject()
-                .append("user_id",          username)
+                .append("username",          username)
                 .append("review",           review);
         addQuery = new BasicDBObject()
                 .append("reviews",          addQuery);
@@ -65,7 +67,7 @@ public class InsertApl {
         BasicDBObject addQuery = new BasicDBObject()
                 .append("_id",              username)
                 .append("likes",            new ArrayList<BasicDBObject>())
-                .append("recipes",          new ArrayList<ObjectId>());
+                .append("recipes", new ArrayList<ObjectId>());
         dh.addUser(addQuery);
     }
 
@@ -73,7 +75,7 @@ public class InsertApl {
     {
         // { "$addToSet" : { "likes" : { "commentID" : 10 , "like" : true}}}
         BasicDBObject addQuery = new BasicDBObject()
-                .append("commentID",        commentID)
+                .append("commentID", commentID)
                 .append("like",             like);
         addQuery = new BasicDBObject()
                 .append("likes",            addQuery);
