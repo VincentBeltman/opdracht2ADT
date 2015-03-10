@@ -1,9 +1,10 @@
 Beste recepten gebaseerd op beoordeling (Mike)
-Meest geliked recepten (Mike)
-Meest gedisliked recepten (Mike)
-Recepten op basis van een set ingredienten (Mike)
+Comment boom opbouwen met sub comments etc 
+
+
+Recepten op basis van een set ingredienten (Mike) AF
 gebruiker zoeken Recepten (Vincent)
-Suggestie ljst(Vincent)
+Suggestie ljst(Vincent) zie opdracht omschrijving gaat over een recept op bais van een lijst ingredienten 
 
 
 Indexes plaatsen(Vincent)
