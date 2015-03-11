@@ -33,15 +33,16 @@ public class InsertApl {
         procedures.add("Pak een gans");
         procedures.add("Kook het");
         List<BasicDBObject> ingredients = new ArrayList<BasicDBObject>();
-        ingredients.add(parseIngredient("Poep", 3, "Stuks"));
+        ingredients.add(parseIngredient("Ganzen", 3, "Stuks"));
         ObjectId recipeID = addRecipe("Ganzen schotel", 5, courses, 5, 12, types, ingredients,
                 "Het vlees van 3 ganzen in één schotel", procedures, username);
 
+        //addUser(username);
         // Add review
-        //addReview(username, 4, recipeID);
+        addReview(username, 4, recipeID);
 
         // Add comment
-        //addComment(username, "Dit is een comment :D", new ObjectId("54f88f063674acb7bfabf910"), new ObjectId("54fc59831822ad7f85691953"));
+        addComment(username, "Dit is een comment :D", new ObjectId("54f88f063674acb7bfabf910"), new ObjectId("54fc59831822ad7f85691953"));
 
         // Add like
         // addLikeWithUpdate(false, new ObjectId("54fc59831822ad7f85691953"), "boomhoo", new ObjectId("54f88f063674acb7bfabf910"));

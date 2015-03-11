@@ -145,20 +145,57 @@ public class DatabaseHandler {
         return (BasicDBList)userColl.find(selquery, colQuery).next().get("likes");
     }
 
-    public void getFavIngredient(BasicDBObject selQuery) {
+    public String getFavIngredient(BasicDBObject selQuery)
+    {
         List<DBObject> aggregate = new ArrayList<DBObject>();
         BasicDBObject colQuery = new BasicDBObject()
                 .append("ingredients.name", 1)
                 .append("_id", 0);
         BasicDBObject group = new BasicDBObject()
                 .append("_id", "$ingredients.name")
-                .append("max", new BasicDBObject("$max", new BasicDBObject("$sum", 1)));
-        //aggregate.add(new BasicDBObject("$match", selQuery));TODO
+                .append("sum", new BasicDBObject("$sum", 1));
+        BasicDBObject sort = new BasicDBObject()
+                .append("sum", -1);
+        //aggregate.add(new BasicDBObject("$match", selQuery));
         aggregate.add(new BasicDBObject("$unwind", "$ingredients"));
         aggregate.add(new BasicDBObject("$project", colQuery));
         aggregate.add(new BasicDBObject("$group", group));
+        aggregate.add(new BasicDBObject("$sort", sort));
         for (DBObject obj : recipeColl.aggregate(aggregate).results()) {
-            System.out.println(obj.toString());
+            return obj.get("_id").toString();
         }
+        return "";
+    }
+
+    public String getFavCourse(BasicDBObject selQuery)
+    {
+        List<DBObject> aggregate = new ArrayList<DBObject>();
+        BasicDBObject colQuery = new BasicDBObject()
+                .append("courses", 1)
+                .append("_id", 0);
+        BasicDBObject group = new BasicDBObject()
+                .append("_id", "$courses")
+                .append("sum", new BasicDBObject("$sum", 1));
+        BasicDBObject sort = new BasicDBObject()
+                .append("sum", -1);
+        //aggregate.add(new BasicDBObject("$match", selQuery));
+        aggregate.add(new BasicDBObject("$unwind", "$courses"));
+        aggregate.add(new BasicDBObject("$project", colQuery));
+        aggregate.add(new BasicDBObject("$group", group));
+        aggregate.add(new BasicDBObject("$sort", sort));
+        for (DBObject obj : recipeColl.aggregate(aggregate).results()) {
+            return obj.get("_id").toString();
+        }
+        return "";
+    }
+
+    public DBCursor searchFavoriteRecipe(String favoriteIngredient, String favoriteCourse)
+    {
+        ArrayList<BasicDBObject> ors = new ArrayList<BasicDBObject>();
+        ors.add(new BasicDBObject("ingredients.name", favoriteIngredient));
+        ors.add(new BasicDBObject("courses", favoriteCourse));
+
+        BasicDBObject selQuery = new BasicDBObject("$or", ors);
+        return recipeColl.find(selQuery);
     }
 }
