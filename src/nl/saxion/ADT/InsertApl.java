@@ -128,7 +128,6 @@ public class InsertApl {
                 .append("_id",              id)
                 .append("username",         username)
                 .append("body",             body)
-                .append("created_at",       new Date())
                 .append("path" ,            path)
                 .append("depth",            depth)
                 .append("likes",            0)
