@@ -5,9 +5,7 @@ import com.mongodb.DBObject;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Vincent on 4-3-2015.
@@ -17,41 +15,239 @@ public class InsertApl {
     public InsertApl(DatabaseHandler dh)
     {
         this.dh = dh;
+        // Add users
+        String[] usernames = new String[7];
+        String mike = "Mike";
+        usernames[0] = mike;
+        String vincent = "Vincent1995";
+        usernames[1] = vincent;
+        String evert = "Evert Stroet";
+        usernames[2] = evert;
+        String jan = "Jan Duipmans";
+        usernames[3] = jan;
+        String jaap = "Jaapie";
+        usernames[4] = jaap;
+        String nobody = "nobody";
+        usernames[5] = nobody;
+        String prakken = "lekker_prakje";
+        usernames[6] = prakken;
+        addUser(mike);
+        addUser(vincent);
+        addUser(evert);
+        addUser(jan);
+        addUser(jaap);
+        addUser(nobody);
+        addUser(prakken);
 
-        // Add user
-        String username  = "boomhoo";
-        //addUser(username);
+        // Mike adds a first recipe 1
+        String username = mike;
+        RecipeHelper rh = new RecipeHelper(this);
+        rh.setName("Kipsalade");
+        rh.setPersonCount(13);
+        rh.addCourse("Toetje");
+        rh.setDifficulty(2);
+        rh.setPreparationTime(30);
+        rh.addTypes("Nederlands");
+        rh.addIngredients(parseIngredient("Boter", 50, "gram"));
+        rh.addIngredients(parseIngredient("Slasaus", 500, "ml"));
+        rh.addIngredients(parseIngredient("Kip", 500, "gram"));
+        rh.addIngredients(parseIngredient("Eieren", 2, "Stuks"));
+        rh.addIngredients(parseIngredient("Bonen", 200, "gram"));
+        rh.setDescription("Een lekkere salade van kip en bonen");
+        rh.addProcedures("Snij de kip in stukken");
+        rh.addProcedures("Maak deze gaar in een pan met boter");
+        rh.addProcedures("Pak de slasaus, de eieren en de bonen en roer dit door elkaar");
+        rh.addProcedures("Als de kip gaar is laat dit dan afkoelen in de koelkast");
+        rh.addProcedures("Als de kip koud is, voeg alles door elkaar en blijf roeren tot het een geheel is");
+        ObjectId recipeId = rh.addRecipe(username);
 
-        // Add recipe
-        List<String> courses = new ArrayList<String>();
-        courses.add("Main");
-        List<String> types = new ArrayList<String>();
-        types.add("French");
-        List<String> procedures = new ArrayList<String>();
-        procedures.add("Pak een gans");
-        procedures.add("Pak een gans");
-        procedures.add("Pak een gans");
-        procedures.add("Kook het");
-        List<BasicDBObject> ingredients = new ArrayList<BasicDBObject>();
-        ingredients.add(parseIngredient("Ganzen", 3, "Stuks"));
-        ObjectId recipeID = addRecipe("Ganzen schotel", 5, courses, 5, 12, types, ingredients,
-                "Het vlees van 3 ganzen in één schotel", procedures, username);
+        // Reviews toevoegen
+        int till = (int)(Math.random()*5) + 1;
+        for (int i = 0; i < till;i++)
+        {
+            int review = (int)(Math.random()*5) + 1;
+            while (username == mike){
+                username = usernames[(int)(Math.random()*5) + 1];
+            }
+            addReview(username, review, recipeId);
+        }
 
-        addUser(username);
-        // Add review
-        addReview(username, 4, recipeID);
+        // Last reviewer adds a random comment
+        ObjectId commentId = addComment(username, "Een random comment", recipeId, null); // Null if it is a parent
+        // Add like or dislike by vincent
+        addLikeWithUpdate(((int)(Math.random()*2) + 1) == 1, commentId, vincent, recipeId);
 
-        username =  "top chef";
-        addUser(username);
-        addReview(username,2 ,recipeID);
 
-        // Add comment
-        addComment(username, "Dit is een comment :D", new ObjectId("54f88f063674acb7bfabf910"), new ObjectId("54fc59831822ad7f85691953"));
 
-        // Add like
-        addLikeWithUpdate(false, new ObjectId("54fc59831822ad7f85691953"), "boomhoo", new ObjectId("54f88f063674acb7bfabf910"));
-        // Add review
-        // addReview("boomhoo",4,new ObjectId("54f88f063674acb7bfabf910"));
+
+
+        // Vincent adds a recipe 2
+        username = vincent;
+        rh = new RecipeHelper(this);
+        rh.setName("Ganzen schotel");
+        rh.setPersonCount(4);
+        rh.addCourse("Dinner");
+        rh.setDifficulty(1);
+        rh.setPreparationTime(60);
+        rh.addTypes("Frans");
+        rh.addIngredients(parseIngredient("Gans", 3, "stuks"));
+        rh.setDescription("Drie ganzen in één schotel");
+        rh.addProcedures("Pak een gans");
+        rh.addProcedures("Pak een gans");
+        rh.addProcedures("Pak een gans");
+        rh.addProcedures("Kook het");
+        recipeId = rh.addRecipe(username);
+
+        // Reviews toevoegen
+        till = (int)(Math.random()*5) + 1;
+        for (int i = 0; i < till;i++)
+        {
+            int review = (int)(Math.random()*5) + 1;
+            while (username == mike){
+                username = usernames[(int)(Math.random()*5) + 1];
+            }
+            addReview(username, review, recipeId);
+        }
+
+        // Last reviewer adds a random comment
+        commentId = addComment(username, "Een random comment", recipeId, null); // Null if it is a parent
+        // Add like or dislike by vincent
+        addLikeWithUpdate(((int)(Math.random()*2) + 1) == 1, commentId, vincent, recipeId);
+
+
+
+
+
+        // Evert adds a recipe 3
+        username = evert;
+        rh = new RecipeHelper(this);
+        rh.setName("Casa di mama");
+        rh.setPersonCount(1);
+        rh.addCourse("Dinner");
+        rh.setDifficulty(1);
+        rh.setPreparationTime(60);
+        rh.addTypes("Italiaans");
+        rh.addIngredients(parseIngredient("Pizza", 1, "stuks"));
+        rh.setDescription("Een lekkere pizza kant en klaar uit de winkel");
+        rh.addProcedures("Pak de pizza");
+        rh.addProcedures("Volg de instructies op de achterkant");
+        recipeId = rh.addRecipe(username);
+
+        // Reviews toevoegen
+        till = (int)(Math.random()*5) + 1;
+        for (int i = 0; i < till;i++)
+        {
+            int review = (int)(Math.random()*5) + 1;
+            while (username == mike){
+                username = usernames[(int)(Math.random()*5) + 1];
+            }
+            addReview(username, review, recipeId);
+        }
+
+        // Last reviewer adds a random comment
+        commentId = addComment(username, "Een random comment", recipeId, null); // Null if it is a parent
+        // Add like or dislike by vincent
+        addLikeWithUpdate(((int)(Math.random()*2) + 1) == 1, commentId, vincent, recipeId);
+
+
+
+
+
+        // Evert adds a recipe 3
+        username = jan;
+        rh = new RecipeHelper(this);
+        rh.setName("Spaghetti");
+        rh.setPersonCount(1);
+        rh.addCourse("Dinner");
+        rh.addCourse("Toetje");
+        rh.setDifficulty(5);
+        rh.setPreparationTime(12345);
+        rh.addTypes("Italiaans");
+        rh.addTypes("Frans");
+        rh.addTypes("Ik ben de naam vergeten");
+        rh.addIngredients(parseIngredient("Spaghetti", 1, "pak"));
+        rh.setDescription("Ik weet niet hoe ik spaghetti moet klaar maken");
+        rh.addProcedures("Zoek maar iets anders");
+        rh.addProcedures("Want");
+        rh.addProcedures("ik");
+        rh.addProcedures("weet");
+        rh.addProcedures("het");
+        rh.addProcedures("niet");
+        recipeId = rh.addRecipe(username);
+
+        // Reviews toevoegen
+        till = (int)(Math.random()*5) + 1;
+        for (int i = 0; i < till;i++)
+        {
+            int review = (int)(Math.random()*5) + 1;
+            while (username == mike){
+                username = usernames[(int)(Math.random()*5) + 1];
+            }
+            addReview(username, review, recipeId);
+        }
+
+        // Last reviewer adds a random comment
+        commentId = addComment(username, "Een random comment", recipeId, null); // Null if it is a parent
+        // Add like or dislike by vincent
+        addLikeWithUpdate(((int)(Math.random()*2) + 1) == 1, commentId, vincent, recipeId);
+
+
+
+
+
+        // Evert adds a recipe 3
+        username = prakken;
+        rh = new RecipeHelper(this);
+        rh.setName("Boerenkool met worst");
+        rh.setPersonCount(8);
+        rh.addCourse("Dinner");
+        rh.setDifficulty(2);
+        rh.setPreparationTime(60);
+        rh.addTypes("Nederlands");
+        rh.addIngredients(parseIngredient("Boerenkool", 2, "kilo"));
+        rh.addIngredients(parseIngredient("Worst", 2, "stuks"));
+        rh.addIngredients(parseIngredient("Aardappelen", 2, "kilo"));
+        rh.setDescription("Een lekkere boerenkool stampot");
+        rh.addProcedures("Kook de boerenkool in een grote pan");
+        rh.addProcedures("Kook tegelijkertijd de aaradappelen (geschild) in een aparte pan");
+        rh.addProcedures("Kook de wordt ook in een aparte pan");
+        rh.addProcedures("Etc..");
+        recipeId = rh.addRecipe(username);
+
+        // Reviews toevoegen
+        till = (int)(Math.random()*5) + 1;
+        for (int i = 0; i < till;i++)
+        {
+            int review = (int)(Math.random()*5) + 1;
+            while (username == mike){
+                username = usernames[(int)(Math.random()*5) + 1];
+            }
+            addReview(username, review, recipeId);
+        }
+
+        // Hier wordt handmatig een comment tree opgezet om te testen.
+        // Eerst een parent
+        ObjectId parrentID1 = addComment(username, "Parent comment", recipeId, null);
+        // Voegen wij twee childs aan toe
+        addComment(username, "Comment depth 1", recipeId, parrentID1);
+        commentId = addComment(username, "Comment depth 1", recipeId, parrentID1);
+        // Ook weer één
+        commentId = addComment(username, "Comment depth 2", recipeId, commentId);
+        // Nog één keer
+        commentId = addComment(username, "Comment depth 3", recipeId, commentId);
+        // Dan nog een parent
+        parrentID1 = addComment(username, "Parent comment", recipeId, null);
+        // Hier ook één aan toevogen
+        addComment(username, "Comment depth 1", recipeId, parrentID1);
+        // Deze tree gaat er als volgt ongeveer uitzien. (volgorde kan verschillen)
+        /*  Parent comment
+                Comment depth 1
+                Comment depth 1
+                    Comment depth 2
+                        Comment depth 3
+            Parent comment
+                Comment depth 1
+         */
     }
 
     public void addReview(String username, int review, ObjectId recipeID)
@@ -147,7 +343,6 @@ public class InsertApl {
         addQuery = new BasicDBObject()
                 .append("$addToSet",        addQuery);
         dh.addCommentToRecipe(addQuery, recipeID);
-        print(id + "");
         return id;
     }
 
