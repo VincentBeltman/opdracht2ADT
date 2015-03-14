@@ -189,6 +189,32 @@ public class DatabaseHandler {
         return "";
     }
 
+    public Iterable<DBObject> findTopNRecipe(int number)
+    {
+        List<DBObject> aggregate = new ArrayList<DBObject>();
+        BasicDBObject group = new BasicDBObject();
+        group.append("_id" , "$_id" );
+        group.append("name" , new BasicDBObject("$first" , "$name"));
+        group.append("avg" , new BasicDBObject("$avg" , "$reviews.review") );
+        group.append("numberOfReviews" , new BasicDBObject("$sum" , 1));
+
+        BasicDBObject sort = new BasicDBObject();
+        sort.append("avg" , -1);
+        sort.append("numberOfReviews" , -1);
+        aggregate.add(new BasicDBObject("$unwind", "$reviews"));
+        aggregate.add(new BasicDBObject("$group", group));
+        aggregate.add(new BasicDBObject("$sort", sort));
+        aggregate.add(new BasicDBObject("$limit" ,number));
+
+        Iterable<DBObject> result =  recipeColl.aggregate(aggregate).results();
+        return  result;
+
+
+
+    }
+
+
+
     public DBCursor searchFavoriteRecipe(String favoriteIngredient, String favoriteCourse)
     {
         ArrayList<BasicDBObject> ors = new ArrayList<BasicDBObject>();
