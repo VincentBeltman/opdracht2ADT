@@ -20,9 +20,9 @@ public class FindApl {
     {
         this.dh =  dh;
         //findRecpiesByIngredients(getIngredientsList("UI" ));
-        //findRecipeByName("Ganzen schotel");
+        findRecipesByName("Ganzen schotel");
         //findRecipeByUser("boomhoo");
-        findUserPreferences("boomhoo");
+        //findUserPreferences("boomhoo");
         //findRecpiesByIngredients(getIngredientsList("UI" , "Ganzen" ));
     }
 
@@ -57,15 +57,14 @@ public class FindApl {
         queryPart.append("$in", ingredientList);
 
         dh.findRecpiesByIngredients(query);
-
-
-
     }
 
-    public void findRecipeByName(String name)
+    public void findRecipesByName(String name)
     {
+        //name = name.substring(1 , 4);
         BasicDBObject selquery = new BasicDBObject()
-                .append("name",             name); //TODO: contains ipv is
+                .append("name", java.util.regex.Pattern.compile(name));
+        System.out.print(selquery.toString());
         dh.findRecipe(selquery);
     }
 

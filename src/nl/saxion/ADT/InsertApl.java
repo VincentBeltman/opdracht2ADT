@@ -37,15 +37,19 @@ public class InsertApl {
         ObjectId recipeID = addRecipe("Ganzen schotel", 5, courses, 5, 12, types, ingredients,
                 "Het vlees van 3 ganzen in één schotel", procedures, username);
 
-        //addUser(username);
+        addUser(username);
         // Add review
         addReview(username, 4, recipeID);
+
+        username =  "top chef";
+        addUser(username);
+        addReview(username,2 ,recipeID);
 
         // Add comment
         addComment(username, "Dit is een comment :D", new ObjectId("54f88f063674acb7bfabf910"), new ObjectId("54fc59831822ad7f85691953"));
 
         // Add like
-        // addLikeWithUpdate(false, new ObjectId("54fc59831822ad7f85691953"), "boomhoo", new ObjectId("54f88f063674acb7bfabf910"));
+        addLikeWithUpdate(false, new ObjectId("54fc59831822ad7f85691953"), "boomhoo", new ObjectId("54f88f063674acb7bfabf910"));
         // Add review
         // addReview("boomhoo",4,new ObjectId("54f88f063674acb7bfabf910"));
     }
@@ -120,9 +124,15 @@ public class InsertApl {
             BasicDBObject selQuery = new BasicDBObject()
                 .append("comments._id",              parentID);
             DBObject obj = dh.findCommentPath(selQuery);
-            Object temp = obj.get("path");
+            Object temp = null;
+            if(obj != null)
+            {
+                temp =  obj.get("path");
+                depth = Integer.parseInt(obj.get("depth").toString()) + 1;
+            }
+
             path = temp == null ? parentID + "":temp.toString() + ":" + parentID;
-            depth = Integer.parseInt(obj.get("depth").toString()) + 1;
+
         }
         BasicDBObject addQuery = new BasicDBObject()
                 .append("_id",              id)
