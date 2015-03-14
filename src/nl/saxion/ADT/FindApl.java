@@ -20,7 +20,8 @@ public class FindApl {
     {
         this.dh =  dh;
         //findRecpiesByIngredients(getIngredientsList("UI" ));
-        findRecipesByName("Ganzen schotel");
+        //findRecipesByName("Ganzen schotel");
+        findTopNRecpies(3);
         //findRecipeByUser("boomhoo");
         //findUserPreferences("boomhoo");
         //findRecpiesByIngredients(getIngredientsList("UI" , "Ganzen" ));
@@ -36,6 +37,21 @@ public class FindApl {
         }
 
         return  result;
+    }
+
+    public void findTopNRecpies(int numberOfItems)
+    {
+        System.out.println("De " + numberOfItems + " beste recepten");
+        print("------------------------------------------------");
+        for(DBObject recipe :dh.findTopNRecipe(numberOfItems))
+        {
+
+            print("Naam recept: " + recipe.get("name"));
+            print("Gemiddeld: "+ recipe.get("avg"));
+            print("Aantal beoordelingn" +  recipe.get("numberOfReviews"));
+            print("------------------------------------------------");
+
+        }
     }
 
     public void findRecpiesByIngredients(ArrayList<BasicDBObject> ingredients)
