@@ -61,12 +61,13 @@ public class InsertApl {
         rh.addProcedures("Als de kip koud is, voeg alles door elkaar en blijf roeren tot het een geheel is");
         ObjectId recipeId = rh.addRecipe(username);
 
+
         // Reviews toevoegen
         int till = (int)(Math.random()*5) + 1;
         for (int i = 0; i < till;i++)
         {
             int review = (int)(Math.random()*5) + 1;
-            while (username == mike){
+            while (username.equals(mike)){
                 username = usernames[(int)(Math.random()*5) + 1];
             }
             addReview(username, review, recipeId);
@@ -103,7 +104,7 @@ public class InsertApl {
         for (int i = 0; i < till;i++)
         {
             int review = (int)(Math.random()*5) + 1;
-            while (username == mike){
+            while (username.equals(mike)){
                 username = usernames[(int)(Math.random()*5) + 1];
             }
             addReview(username, review, recipeId);
@@ -138,7 +139,7 @@ public class InsertApl {
         for (int i = 0; i < till;i++)
         {
             int review = (int)(Math.random()*5) + 1;
-            while (username == mike){
+            while (username.equals(mike)){
                 username = usernames[(int)(Math.random()*5) + 1];
             }
             addReview(username, review, recipeId);
@@ -180,7 +181,7 @@ public class InsertApl {
         for (int i = 0; i < till;i++)
         {
             int review = (int)(Math.random()*5) + 1;
-            while (username == mike){
+            while (username.equals(mike)){
                 username = usernames[(int)(Math.random()*5) + 1];
             }
             addReview(username, review, recipeId);
@@ -219,7 +220,7 @@ public class InsertApl {
         for (int i = 0; i < till;i++)
         {
             int review = (int)(Math.random()*5) + 1;
-            while (username == mike){
+            while (username.equals(mike)){
                 username = usernames[(int)(Math.random()*5) + 1];
             }
             addReview(username, review, recipeId);

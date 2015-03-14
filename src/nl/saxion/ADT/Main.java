@@ -6,6 +6,6 @@ public class Main {
         DatabaseHandler dh = DatabaseHandler.getIntance();
         dh.connect();
         new InsertApl(dh);
-        //new FindApl(dh);
+        new FindApl(dh);
     }
 }

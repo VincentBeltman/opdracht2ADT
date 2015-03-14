@@ -197,10 +197,7 @@ public class DatabaseHandler {
         aggregate.add(new BasicDBObject("$sort", sort));
         aggregate.add(new BasicDBObject("$limit" ,number));
 
-        Iterable<DBObject> result =  recipeColl.aggregate(aggregate).results();
-        return  result;
-
-
+        return  recipeColl.aggregate(aggregate).results();
 
     }
 

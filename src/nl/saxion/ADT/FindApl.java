@@ -6,7 +6,7 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import org.bson.types.ObjectId;
 
-import java.lang.reflect.Array;
+
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,7 +20,6 @@ public class FindApl {
     public  FindApl(DatabaseHandler dh)
     {
         this.dh =  dh;
-        //findRecpiesByIngredients(getIngredientsList("Ui" ));
         findRecipesByName("Ganzen schotel");
         findTopNRecpies(3);
         findRecipeByUser("boomhoo");
