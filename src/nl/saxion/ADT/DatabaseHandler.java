@@ -102,24 +102,15 @@ public class DatabaseHandler {
         return returnValue;
     }
 
-    public void findRecpiesByIngredients(BasicDBObject searchQuery)
+    public DBCursor findRecpiesByIngredients(BasicDBObject searchQuery)
     {
-        System.out.println(searchQuery);
-        DBCursor cursor = recipeColl.find(searchQuery);
-        while (cursor.hasNext())
-        {
-            System.out.println(JsonPrettyPrinter.toJsonPrettyPrint(cursor.next()));
-            //ystem.out.println(cursor.next().toString());
-        }
+        return  recipeColl.find(searchQuery);
     }
 
-    public void findRecipe(BasicDBObject searchQuery)
+    public DBCursor findRecipe(BasicDBObject searchQuery)
     {
-        DBCursor cursor = recipeColl.find(searchQuery);
-        while (cursor.hasNext())
-        {
-            System.out.println(JsonPrettyPrinter.toJsonPrettyPrint(cursor.next()));
-        }
+        return recipeColl.find(searchQuery);
+
     }
 
     public ArrayList<DBObject> getRecipesOfUser(BasicDBObject selquery)

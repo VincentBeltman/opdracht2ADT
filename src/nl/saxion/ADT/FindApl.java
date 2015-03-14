@@ -2,6 +2,7 @@ package nl.saxion.ADT;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import org.bson.types.ObjectId;
 
@@ -19,12 +20,12 @@ public class FindApl {
     public  FindApl(DatabaseHandler dh)
     {
         this.dh =  dh;
-        //findRecpiesByIngredients(getIngredientsList("UI" ));
-        //findRecipesByName("Ganzen schotel");
+        //findRecpiesByIngredients(getIngredientsList("Ui" ));
+        findRecipesByName("Ganzen schotel");
         findTopNRecpies(3);
-        //findRecipeByUser("boomhoo");
-        //findUserPreferences("boomhoo");
-        //findRecpiesByIngredients(getIngredientsList("UI" , "Ganzen" ));
+        findRecipeByUser("boomhoo");
+        findUserPreferences("boomhoo");
+        findRecpiesByIngredients(getIngredientsList("Ui" , "Ganzen" ));
     }
 
     public ArrayList getIngredientsList(String ... names )
@@ -41,7 +42,7 @@ public class FindApl {
 
     public void findTopNRecpies(int numberOfItems)
     {
-        System.out.println("De " + numberOfItems + " beste recepten");
+        print("De " + numberOfItems + " beste recepten");
         print("------------------------------------------------");
         for(DBObject recipe :dh.findTopNRecipe(numberOfItems))
         {
@@ -56,6 +57,7 @@ public class FindApl {
 
     public void findRecpiesByIngredients(ArrayList<BasicDBObject> ingredients)
     {
+        print("Recepten gezoct op basis van ingredienten");
         ArrayList<String> ingredientList = new ArrayList<String>();
 
         for(BasicDBObject ingredient :  ingredients)
@@ -72,16 +74,25 @@ public class FindApl {
         query.append("ingredients.name" ,queryPart);
         queryPart.append("$in", ingredientList);
 
-        dh.findRecpiesByIngredients(query);
+        DBCursor cursor = dh.findRecpiesByIngredients(query);
+        while (cursor.hasNext())
+        {
+            printRecipe(cursor.next());
+        }
     }
 
     public void findRecipesByName(String name)
     {
-        //name = name.substring(1 , 4);
+        print("Recepten gezocht met de naam " + name);
         BasicDBObject selquery = new BasicDBObject()
                 .append("name", java.util.regex.Pattern.compile(name));
-        System.out.print(selquery.toString());
-        dh.findRecipe(selquery);
+
+        DBCursor result = dh.findRecipe(selquery);
+        while (result.hasNext())
+        {
+            printRecipe(result.next());
+        }
+
     }
 
     public void findRecipeByUser(String username)
