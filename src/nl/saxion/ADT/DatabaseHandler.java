@@ -147,7 +147,7 @@ public class DatabaseHandler {
                 .append("sum", new BasicDBObject("$sum", 1));
         BasicDBObject sort = new BasicDBObject()
                 .append("sum", -1);
-        //aggregate.add(new BasicDBObject("$match", selQuery));
+        aggregate.add(new BasicDBObject("$match", selQuery));
         aggregate.add(new BasicDBObject("$unwind", "$ingredients"));
         aggregate.add(new BasicDBObject("$project", colQuery));
         aggregate.add(new BasicDBObject("$group", group));
@@ -169,7 +169,7 @@ public class DatabaseHandler {
                 .append("sum", new BasicDBObject("$sum", 1));
         BasicDBObject sort = new BasicDBObject()
                 .append("sum", -1);
-        //aggregate.add(new BasicDBObject("$match", selQuery));
+        aggregate.add(new BasicDBObject("$match", selQuery));
         aggregate.add(new BasicDBObject("$unwind", "$courses"));
         aggregate.add(new BasicDBObject("$project", colQuery));
         aggregate.add(new BasicDBObject("$group", group));

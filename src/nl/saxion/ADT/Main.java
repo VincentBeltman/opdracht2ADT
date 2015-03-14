@@ -5,7 +5,7 @@ public class Main {
 	// write your code here
         DatabaseHandler dh = DatabaseHandler.getIntance();
         dh.connect();
-        //new InsertApl(dh);
-        new FindApl(dh);
+        new InsertApl(dh);
+        //new FindApl(dh);
     }
 }
