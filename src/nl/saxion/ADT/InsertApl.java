@@ -277,7 +277,7 @@ public class InsertApl {
     {
         // { "$addToSet" : { "likes" : { "commentID" : 10 , "like" : true}}}
         BasicDBObject addQuery = new BasicDBObject()
-                .append("commentID", commentID)
+                .append("commentID",        commentID)
                 .append("like",             like);
         addQuery = new BasicDBObject()
                 .append("likes",            addQuery);

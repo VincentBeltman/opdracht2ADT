@@ -51,7 +51,7 @@ public class RecipeHelper {
     }
 
     public void addProcedures(String procedure) {
-        procedures.add("procedure");
+        procedures.add(procedure);
     }
 
     public void addIngredients(BasicDBObject ingredient) {

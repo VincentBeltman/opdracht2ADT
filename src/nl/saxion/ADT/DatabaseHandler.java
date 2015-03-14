@@ -119,11 +119,12 @@ public class DatabaseHandler {
                 .append("_id",          0)
                 .append("recipes", 1);
         DBCursor cursor = userColl.find(selquery, colQuery);
-        BasicBSONList recipeIDs = (BasicBSONList)cursor.next().get("recipes");
         ArrayList<DBObject> results = new ArrayList<DBObject>();
-        for (Object recipeID:recipeIDs)
-        {
-            results.add(recipeColl.find(new BasicDBObject("_id", recipeID)).one());
+        if (cursor.hasNext()) {
+            BasicDBList recipeIDs = (BasicDBList) cursor.next().get("recipes");
+            for (Object recipeID : recipeIDs) {
+                results.add(recipeColl.find(new BasicDBObject("_id", recipeID)).one());
+            }
         }
         return results;
     }
@@ -133,7 +134,11 @@ public class DatabaseHandler {
         BasicDBObject colQuery = new BasicDBObject()
                 .append("_id",          0)
                 .append("likes", 1);
-        return (BasicDBList)userColl.find(selquery, colQuery).next().get("likes");
+        DBCursor cursor = userColl.find(selquery, colQuery);
+        if (cursor.hasNext()) {
+            return (BasicDBList) cursor.next().get("likes");
+        }
+        return new BasicDBList();
     }
 
     public String getFavIngredient(BasicDBObject selQuery)

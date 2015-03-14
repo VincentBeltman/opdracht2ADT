@@ -20,11 +20,24 @@ public class FindApl {
     public  FindApl(DatabaseHandler dh)
     {
         this.dh =  dh;
-        findRecipesByName("Ganzen schotel");
+        // Geeft Ganzen schotel recept terug
+        findRecipesByName("Ganzen");
+        print("");
+        print("");
+        // Top drie beste recepten
         findTopNRecpies(3);
-        findRecipeByUser("boomhoo");
-        findUserPreferences("boomhoo");
-        findRecpiesByIngredients(getIngredientsList("Ui" , "Ganzen" ));
+        print("");
+        print("");
+        // Het recept van lekker_prakje. Hier zijn de comments ook zichtbaar
+        findRecipeByUser("lekker_prakje");
+        print("");
+        print("");
+        // Geeft recepten terug die hij misschien leuk zou vinden.
+        findUserPreferences("Vincent1995");
+        print("");
+        print("");
+        // Geeft het pizza recept en het ganzen recept terug.
+        findRecipesByIngredients(getIngredientsList("Pizza", "Spaghetti"));
     }
 
     public ArrayList getIngredientsList(String ... names )
@@ -54,9 +67,9 @@ public class FindApl {
         }
     }
 
-    public void findRecpiesByIngredients(ArrayList<BasicDBObject> ingredients)
+    public void findRecipesByIngredients(ArrayList<BasicDBObject> ingredients)
     {
-        print("Recepten gezoct op basis van ingredienten");
+        print("Recepten gezocht op basis van ingredienten");
         ArrayList<String> ingredientList = new ArrayList<String>();
 
         for(BasicDBObject ingredient :  ingredients)
@@ -96,6 +109,7 @@ public class FindApl {
 
     public void findRecipeByUser(String username)
     {
+        print("Recepten gezocht van de user " + username);
         BasicDBObject selquery = new BasicDBObject()
                 .append("_id",              username);
         for (DBObject recipe:dh.getRecipesOfUser(selquery))
@@ -106,6 +120,7 @@ public class FindApl {
 
     public void findUserPreferences(String username)
     {
+        print("Recept die " + username + " misschien leuk zou vinden");
         // First we get all of the likes of the user
         BasicDBObject selQuery = new BasicDBObject()
                 .append("_id",              username);
@@ -114,7 +129,7 @@ public class FindApl {
         for (Object like:dh.getLikesOfUser(selQuery))
         {
             DBObject temp = (DBObject) like;
-            if (temp.get("like").toString() == "true") {
+            if (temp.get("like").toString().equals("true")) {
                 likes.add((ObjectId) temp.get("commentID"));
             } else{
                 dislikes.add((ObjectId) temp.get("commentID"));
@@ -122,7 +137,7 @@ public class FindApl {
         }
         // Now we have a list of likes an dislikes. We need to extract patterns now.
         selQuery = new BasicDBObject()
-                .append("_id", new BasicDBObject("$in", likes));
+                .append("comments._id", new BasicDBObject("$in", likes));
         String favoriteIngredient = dh.getFavIngredient(selQuery);
         String favoriteCourse = dh.getFavCourse(selQuery);
 
@@ -170,7 +185,7 @@ public class FindApl {
         int count = 1;
         for (Object procedure:((BasicDBList)recipe.get("procedures")))
         {
-            print(" " + count + ". " + procedure.toString());
+            print(" " + count + ". " + procedure);
             count++;
         }
         print("Reacties:");
