@@ -38,6 +38,16 @@ public class FindApl {
         print("");
         // Geeft het pizza recept en het ganzen recept terug.
         findRecipesByIngredients(getIngredientsList("Pizza", "Spaghetti"));
+
+        //Geeft recepten terug met een moeilijkheidsgraad 2 of lager
+        findMaxDiffuculty(2);
+
+        //Geeft recepten terug met een moeilijkheidsgraad 2 of hoger
+        findMinDiffuculty(2);
+
+        findMaxPrepTime(36);
+
+        findMinPrepTime(60);
     }
 
     public ArrayList getIngredientsList(String ... names )
@@ -193,6 +203,51 @@ public class FindApl {
             printCommentTree(item);
         }
     }
+
+    public void findMaxDiffuculty(int diff)
+    {
+        print("Recepten met maximale moelijkheid " + diff);
+        DBCursor result = dh.findMaxField("difficulty" , diff);
+        while (result.hasNext())
+        {
+            printRecipe(result.next());
+        }
+
+    }
+
+    public void findMinDiffuculty(int diff)
+    {
+        print("Recepten met minimale moelijkheid " + diff);
+        DBCursor result = dh.findMinField("difficulty" , diff);
+        while (result.hasNext())
+        {
+            printRecipe(result.next());
+        }
+
+    }
+
+    public void findMaxPrepTime(int sec)
+    {
+        print("Recepten die binen " + sec + " sec bereid kunnen worden");
+        DBCursor result = dh.findMinField("preparationTime" , sec);
+        while (result.hasNext())
+        {
+            printRecipe(result.next());
+        }
+    }
+
+    public void findMinPrepTime(int sec)
+    {
+        print("Recepten die vanaf " + sec + " sec bereid kunnen worden");
+        DBCursor result = dh.findMinField("preparationTime" , sec);
+        while (result.hasNext())
+        {
+            printRecipe(result.next());
+        }
+    }
+
+
+
 
     public void print(String print)
     {
