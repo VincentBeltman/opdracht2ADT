@@ -25,7 +25,7 @@ public class FindApl {
         print("");
         print("");
         // Top drie beste recepten
-        findTopNRecpies(3);
+        findTopNRecipes(3);
         print("");
         print("");
         // Het recept van lekker_prakje. Hier zijn de comments ook zichtbaar
@@ -52,7 +52,7 @@ public class FindApl {
         return  result;
     }
 
-    public void findTopNRecpies(int numberOfItems)
+    public void findTopNRecipes(int numberOfItems)
     {
         print("De " + numberOfItems + " beste recepten");
         print("------------------------------------------------");
