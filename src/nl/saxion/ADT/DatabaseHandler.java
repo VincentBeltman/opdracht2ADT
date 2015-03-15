@@ -206,6 +206,21 @@ public class DatabaseHandler {
 
     }
 
+    public DBCursor findMaxField(String field ,  int maxValue)
+    {
+        BasicDBObject query = new BasicDBObject().append(field , new BasicDBObject("$lte" , maxValue));
+        return recipeColl.find(query);
+
+    }
+    public DBCursor findMinField(String field ,  int maxValue)
+    {
+        BasicDBObject query = new BasicDBObject().append(field , new BasicDBObject("$gte" , maxValue));
+
+        return recipeColl.find(query);
+
+    }
+
+
 
 
     public DBCursor searchFavoriteRecipe(String favoriteIngredient, String favoriteCourse)
